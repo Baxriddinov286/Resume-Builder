@@ -33,13 +33,13 @@ const SignIn = () => {
     }
 
     if (data && data.length > 0) {
-      const userId = data[0].id; 
+      const userId = data[0].id; // user ID ni olish
       console.log("User ID:" + userId);
-      localStorage.setItem("userId", userId); 
+      localStorage.setItem("userId", userId); // localStorage ga saqlash
       toast.success("Muvaffaqiyatli tizimga kirdingiz!");
-      setTimeout(() => {
-        location.href = "/dashboard";
-      }, 1500);
+      // setTimeout(() => {
+      //   location.href = "/dashboard";
+      // }, 1500);
     } else {
       toast.warning("Email yoki parol noto‘g‘ri!");
     }
@@ -47,7 +47,7 @@ const SignIn = () => {
 
   return (
     <div className="h-screen flex items-center justify-center">
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={3000} />
       <form
         onSubmit={handleSignIn}
         className="bg-white border border-black p-8 rounded-2xl shadow-xl w-full max-w-md"
