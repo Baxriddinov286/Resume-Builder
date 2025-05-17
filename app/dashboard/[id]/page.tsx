@@ -4,7 +4,9 @@ import DrawResume from "@/app/_Components/drawResume";
 import { createClient } from "@/supabase/client";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaFileDownload, FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { TfiSave } from "react-icons/tfi";
 import { toast, ToastContainer } from "react-toastify";
 import { Drawer } from "vaul";
 
@@ -981,12 +983,17 @@ function Dashboard() {
           </Drawer.Root>
         </div>
 
-        <button
-          onClick={fullSave}
-          className="bg-black text-white rounded py-2 px-6 hover:bg-gray-800 transition self-center w-50 mx-auto d-block"
-        >
-          Save
-        </button>
+        <div className="flex gap-2 items-center">
+          <button
+            onClick={fullSave}
+            className="flex gap-2 items-center d-block bg-black text-white rounded py-2 px-6 hover:bg-gray-800 transition self-center w-50 mx-auto d-block"
+          >
+            <TfiSave /> Save
+          </button>
+          <button className="flex gap-2 items-center d-block bg-black text-white rounded py-2 px-6 hover:bg-gray-800 transition self-center w-50 mx-auto d-block">
+            <FaRegEdit /> Update
+          </button>
+        </div>
       </div>
 
       <DrawResume />

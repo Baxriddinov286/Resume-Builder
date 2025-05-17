@@ -37,12 +37,6 @@ const SignUp = () => {
     if (error) {
       console.log(error.message);
     } else {
-      // @ts-ignore
-      const userId = data[0].id;
-
-      if (userId) {
-        localStorage.setItem("userId", userId);
-      }
       location.href = "/";
     }
 

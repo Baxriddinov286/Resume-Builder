@@ -33,9 +33,9 @@ const SignIn = () => {
     }
 
     if (data && data.length > 0) {
-      const userId = data[0].id; 
+      const userId = data[0].id;
       console.log("User ID:" + userId);
-      localStorage.setItem("userId", userId); 
+      localStorage.setItem("userId", userId);
       toast.success("Muvaffaqiyatli tizimga kirdingiz!");
       setTimeout(() => {
         location.href = "/dashboard";
