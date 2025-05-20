@@ -2,8 +2,9 @@
 
 import DrawResume from "@/app/_Components/drawResume";
 import { createClient } from "@/supabase/client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AiOutlineHome } from "react-icons/ai";
 import { FaFileDownload, FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { TfiSave } from "react-icons/tfi";
@@ -13,6 +14,9 @@ import { Drawer } from "vaul";
 function Dashboard() {
   const params = useParams();
   const id = typeof params?.id === "string" ? params.id : "";
+  const router = useRouter();
+  const supabase = createClient();
+  const [Updatecurrent, setUpdatecurrent] = useState(null);
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -211,8 +215,7 @@ function Dashboard() {
     setLanguages(newProjects);
   };
 
-  const supabase = createClient();
-
+  // fullsave
   const fullSave = async () => {
     if (
       !fullName.trim() ||
@@ -236,41 +239,125 @@ function Dashboard() {
       return;
     }
 
+    const payload = {
+      userId: id,
+      full_name: fullName,
+      email: email,
+      mobile_number: mobileNumber,
+      linkedIn: linkedIn,
+      github: github,
+      portfolio: portfolio,
+      address: address,
+      job_title: jobTitle,
+      summary: message,
+      experiences: experiences,
+      projects: projects,
+      educations: educations,
+      skills: skill,
+      languages: language,
+    };
+
     try {
-      const { data, error } = await supabase.from("Resume_Builder").insert([
-        {
-          userId: id,
-          full_name: fullName,
-          email: email,
-          mobile_number: mobileNumber,
-          linkedIn: linkedIn,
-          github: github,
-          portfolio: portfolio,
-          address: address,
-          job_title: jobTitle,
-          summary: message,
-          experiences: experiences,
-          projects: projects,
-          educations: educations,
-          skills: skill,
-          languages: language,
-        },
-      ]);
+      let response;
+      if (!Updatecurrent) {
+        // Yangisini qo‘shish
+        response = await supabase.from("Resume_Builder").insert([payload]);
+      } else {
+        // Mavjudini yangilash
+        response = await supabase
+          .from("Resume_Builder")
+          .update(payload)
+          .eq("id", Updatecurrent);
+      }
+
+      const { error } = response;
 
       if (error) {
-        toast.error("Xato yuz berdi: " + error.message);
+        toast.error("Xatolik yuz berdi: " + error.message);
       } else {
-        toast.success("Resume muvaffaqiyatli saqlandi!");
+        toast.success(
+          !Updatecurrent
+            ? "Resume muvaffaqiyatli saqlandi✅"
+            : "Resume muvaffaqiyatli yangilandi🔁"
+        );
+        setUpdatecurrent(null);
+        setFullName("");
+        setEmail("");
+        setMobileNumber("");
+        setLinkedIn("");
+        setGithub("");
+        setPortfolio("");
+        setAddress("");
+        setJobTitle("");
+        setMessage("");
+        setExperiences([]);
+        setProjects([]);
+        setEducations([]);
+        setSkills([]);
+        setLanguages([]);
       }
     } catch (err) {
-      toast.error("Xato yuz berdi ");
+      toast.error("Server bilan bog‘lanishda xatolik yuz berdi");
+    }
+  };
+
+  const parseJsonArray = (arr: any) => {
+    if (!Array.isArray(arr)) return [];
+    return arr.map((item) => {
+      try {
+        return JSON.parse(item);
+      } catch {
+        return {};
+      }
+    });
+  };
+
+  const updateBuilder = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("Resume_Builder")
+        .select("*")
+        .eq("userId", id)
+        .single();
+
+      if (error) {
+        toast.error(
+          "Ma'lumot topilmadi yoki yuklashda xatolik: " + error.message
+        );
+        return;
+      }
+
+      setUpdatecurrent(data.id);
+      setFullName(data.full_name || "");
+      setEmail(data.email || "");
+      setMobileNumber(data.mobile_number || "");
+      setLinkedIn(data.linkedIn || "");
+      setGithub(data.github || "");
+      setPortfolio(data.portfolio || "");
+      setAddress(data.address || "");
+      setJobTitle(data.job_title || "");
+      setMessage(data.summary || "");
+      setExperiences(parseJsonArray(data.experiences));
+      setProjects(parseJsonArray(data.projects));
+      setEducations(parseJsonArray(data.educations));
+      setSkills(parseJsonArray(data.skills));
+      setLanguages(parseJsonArray(data.languages));
+    } catch (err) {
+      toast.error("Server bilan bog‘lanishda xatolik yuz berdi");
     }
   };
 
   return (
-    <div className="max-w-[1520] mx-auto flex items-start justify-content-between p-4">
-      <div className=" p-6 rounded-lg shadow-lg w-full max-w-2xl">
+    <div className="max-w-[1520px] mx-auto flex flex-col md:flex-row items-start justify-between p-4 gap-4">
+      <div className="p-6 rounded-lg shadow-lg w-full md:max-w-2xl bg-white">
         <ToastContainer />
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+        >
+          <AiOutlineHome className="text-xl" />
+          <span>Bosh sahifaga qaytish</span>
+        </button>
         {/* General - Social Section */}
         <div>
           <h5 className="text-sm font-bold mb-4">GENERAL - Social</h5>
@@ -894,7 +981,6 @@ function Dashboard() {
             </Drawer.Portal>
           </Drawer.Root>
         </div>
-
         {/* Languages Section */}
         <div>
           {language.length > 0 && (
@@ -986,11 +1072,14 @@ function Dashboard() {
         <div className="flex gap-2 items-center">
           <button
             onClick={fullSave}
-            className="flex gap-2 items-center d-block bg-black text-white rounded py-2 px-6 hover:bg-gray-800 transition self-center w-50 mx-auto d-block"
+            className="flex gap-2 items-center justify-content-center bg-black text-white rounded py-3 px-6 hover:bg-gray-800 transition w-50 mx-auto"
           >
             <TfiSave /> Save
           </button>
-          <button className="flex gap-2 items-center d-block bg-black text-white rounded py-2 px-6 hover:bg-gray-800 transition self-center w-50 mx-auto d-block">
+          <button
+            onClick={updateBuilder}
+            className="flex gap-2 items-center justify-content-center  bg-black text-white rounded py-3 px-6 hover:bg-gray-800 transition  w-50 mx-auto "
+          >
             <FaRegEdit /> Update
           </button>
         </div>
