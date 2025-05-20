@@ -29,7 +29,7 @@ function Dashboard() {
   const [message, setMessage] = useState("");
 
   /* Experience Section */
-  const [experiences, setExperiences] = useState([]);
+  const [experiences, setExperiences] = useState<any>([]);
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [location, setLocation] = useState("");
@@ -79,7 +79,7 @@ function Dashboard() {
   };
 
   // Projects
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<any>([]);
   const [projectName, setProjectName] = useState("");
   const [deployLink, setDeployLink] = useState("");
   const [repoLink, setRepoLink] = useState("");
@@ -113,7 +113,7 @@ function Dashboard() {
   };
 
   // Education
-  const [educations, setEducations] = useState([]);
+  const [educations, setEducations] = useState<any>([]);
   const [educationInstitution, setEducationInstitution] = useState("");
   const [educationDegree, setEducationDegree] = useState("");
   const [educationStudy, setEducationStudy] = useState("");
@@ -164,7 +164,7 @@ function Dashboard() {
   };
 
   // Skill
-  const [skill, setSkills] = useState([]);
+  const [skill, setSkills] = useState<any>([]);
   const [skillName, setSkillName] = useState("");
   const [skillList, setSkillList] = useState("");
   const handleSaveSkills = () => {
@@ -190,7 +190,7 @@ function Dashboard() {
   };
 
   // Language
-  const [language, setLanguages] = useState([]);
+  const [language, setLanguages] = useState<any>([]);
   const [languageName, setLanguageName] = useState("");
   const [languageleave, setLanguageleave] = useState("");
   const handleSaveLanguage = () => {
@@ -458,7 +458,7 @@ function Dashboard() {
         <div>
           {experiences.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-64 overflow-y-auto mt-4">
-              {experiences.map((exp: any, index) => (
+              {experiences.map((exp: any, index: any) => (
                 <div
                   key={index}
                   className="border border-gray-300 p-4 rounded-md shadow-md h-fit relative"
@@ -624,7 +624,7 @@ function Dashboard() {
         <div>
           {projects.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-64 overflow-y-auto mt-4">
-              {projects.map((exp: any, index) => (
+              {projects.map((exp: any, index: any) => (
                 <div
                   key={index}
                   className="border border-gray-300 p-4 rounded-md shadow-md h-fit relative"
@@ -748,7 +748,7 @@ function Dashboard() {
         <div>
           {educations.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-64 overflow-y-auto mt-4">
-              {educations.map((edu: any, index) => (
+              {educations.map((edu: any, index: any) => (
                 <div
                   key={index}
                   className="border border-gray-300 p-4 rounded-md shadow-md h-fit relative"
@@ -906,7 +906,7 @@ function Dashboard() {
         <div>
           {skill.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-64 overflow-y-auto mt-4">
-              {skill.map((edu: any, index) => (
+              {skill.map((edu: any, index: any) => (
                 <div
                   key={index}
                   className="border border-gray-300 p-4 rounded-md shadow-md h-fit relative"
@@ -985,7 +985,7 @@ function Dashboard() {
         <div>
           {language.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-64 overflow-y-auto mt-4">
-              {language.map((edu: any, index) => (
+              {language.map((edu: any, index: any) => (
                 <div
                   key={index}
                   className="border border-gray-300 p-4 rounded-md shadow-md h-fit relative"
